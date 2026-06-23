@@ -99,9 +99,20 @@
   .hint{position:fixed;top:2.4vh;right:2.6vw;font-size:12px;color:rgba(110,140,155,.7);z-index:30;}
 
   @media (max-width:760px){
-    .split{grid-template-columns:1fr;gap:18px;} .split .frame{display:none;}
-    .grp{grid-template-columns:1fr;}
-    .cmp td,.cmp th{font-size:11px;padding:8px 6px;}
+    .slide{padding:6vh 6vw 11vh;justify-content:flex-start;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+    .slide h1{font-size:26px;line-height:1.18;}
+    .slide h2{font-size:21px;}
+    .lead{font-size:14.5px;margin-top:13px;}
+    .tag{font-size:10.5px;margin-bottom:11px;letter-spacing:.16em;}
+    .stmt{font-size:23px;margin-top:10px;}
+    .split{display:flex;flex-direction:column;gap:14px;} .split .frame{display:block;} .split .frame img{max-height:30vh;}
+    .grp{grid-template-columns:1fr;gap:13px;margin-top:16px;} .grp .it .h{font-size:15px;} .grp .it .d{font-size:12.5px;} .grp .it .ic{width:30px;height:30px;font-size:14px;}
+    .keyline{font-size:12.5px;padding:12px 14px;}
+    .cmp td,.cmp th{font-size:10.5px;padding:7px 5px;}
+    .funnel{margin-top:18px;} .funnel .f{flex-direction:column;align-items:flex-start;gap:4px;padding:13px 15px;} .funnel .f .lbl{min-width:0;}
+    .closing .cta{position:static;margin-top:24px;gap:16px 30px;}
+    .cover .meta,.cover .pg{display:none;}
+    .hint{display:none;} .nav{bottom:1.4vh;}
   }
 </style>
 </head>
