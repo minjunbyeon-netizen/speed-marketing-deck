@@ -16,6 +16,7 @@
     --radius:14px; --shadow:0 22px 60px rgba(8,34,52,.18);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
+  b,strong{font-weight:800;}   /* 굵기 2종(400·800)으로 통일 — 기본 bold(700) 차단 */
   html,body{height:100%;}
   body{font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",sans-serif;color:var(--ink);background:var(--darker);line-height:1.55;overflow:hidden;-webkit-text-size-adjust:100%;}
   .deck{position:fixed;inset:0;}
@@ -67,7 +68,7 @@
   /* table */
   table{width:100%;border-collapse:collapse;margin-top:clamp(16px,2.8vh,34px);}
   .pt td,.pt th{padding:clamp(11px,1.7vh,22px) clamp(8px,1vw,18px);border-bottom:1px solid var(--line);font-size:clamp(13px,1.3vw,22px);letter-spacing:-0.015em;text-align:left;vertical-align:top;}
-  .pt th{background:var(--navy);color:#fff;font-weight:700;font-size:clamp(12px,1.1vw,18px);}
+  .pt th{background:var(--navy);color:#fff;font-weight:800;font-size:clamp(12px,1.1vw,18px);}
   .pt td b{color:var(--navy);} .pt tr:last-child td{border-bottom:0;}
 
   /* roles */
