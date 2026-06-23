@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>스피드설비 — 홈페이지 마케팅 활용 (사장님용)</title>
+<style>
+  :root{
+    --ink:#14202b; --sub:#5c6b76; --line:#e4ebef; --bg:#ffffff; --soft:#eef6f9;
+    --navy:#0c2f4a; --dark:#0c2f4a; --darker:#082234;
+    --aqua:#0fa9cc; --aqua-2:#0b88a3; --mint:#86dcf0;
+    --orange:#f26419; --orange-soft:#fdeee6; --green:#1c7d3e; --green-soft:#eafaf1;
+    --radius:14px; --shadow:0 22px 60px rgba(8,34,52,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","맑은 고딕",sans-serif;color:var(--ink);background:var(--darker);line-height:1.55;overflow:hidden;-webkit-text-size-adjust:100%;}
+  .deck{position:fixed;inset:0;}
+  .slide{position:absolute;inset:0;display:none;padding:8vh 7vw;background:var(--bg);flex-direction:column;justify-content:center;}
+  .slide.active{display:flex;}
+  .anim{opacity:0;}
+  .slide.active .anim{animation:rise .55s cubic-bezier(.2,.7,.2,1) var(--d,0s) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+
+  .tag{font-size:clamp(11px,1vw,15px);letter-spacing:.22em;color:var(--aqua-2);font-weight:800;text-transform:uppercase;margin-bottom:clamp(12px,2vh,24px);}
+  .slide h1{font-size:clamp(30px,4.4vw,76px);letter-spacing:-0.035em;font-weight:800;line-height:1.16;}
+  .slide h2{font-size:clamp(24px,3vw,50px);letter-spacing:-0.03em;font-weight:800;line-height:1.2;}
+  .lead{font-size:clamp(15px,1.5vw,25px);letter-spacing:-0.015em;color:var(--sub);margin-top:clamp(14px,2.4vh,28px);max-width:40em;line-height:1.55;}
+  .em{color:var(--aqua-2);} .or{color:var(--orange);}
+
+  /* cover / dark */
+  .cover{background:var(--dark);justify-content:center;}
+  .cover .logo{font-size:clamp(12px,1.1vw,17px);letter-spacing:.34em;color:var(--mint);font-weight:800;margin-bottom:clamp(20px,3.6vh,42px);}
+  .cover h1{color:#fff;} .cover .lead{color:#a9cdd9;}
+  .cover .meta{position:absolute;left:7vw;bottom:6vh;font-size:clamp(11px,1.1vw,15px);letter-spacing:.05em;color:#5f8499;}
+  .cover .pg{position:absolute;right:7vw;bottom:6vh;font-size:clamp(11px,1.1vw,15px);color:#5f8499;}
+  .cover .badge{display:inline-block;margin-top:clamp(16px,2.6vh,26px);background:rgba(15,169,204,.16);border:1px solid rgba(15,169,204,.5);color:#bfe9f3;font-weight:800;font-size:clamp(12px,1.1vw,17px);padding:9px 16px;border-radius:10px;}
+  .dk{background:var(--dark);} .dk h2,.dk h1{color:#fff;} .dk .tag{color:var(--mint);} .dk .lead{color:#a9cdd9;}
+
+  /* frame */
+  .frame{border-radius:12px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);background:#fff;}
+  .frame .bar{height:clamp(28px,3vh,42px);background:#eaf1f4;display:flex;align-items:center;gap:7px;padding:0 clamp(11px,1vw,18px);border-bottom:1px solid var(--line);}
+  .frame .bar i{width:clamp(8px,.7vw,11px);height:clamp(8px,.7vw,11px);border-radius:50%;background:#c6d3d9;display:block;}
+  .frame .bar .u{margin-left:clamp(8px,.8vw,14px);font-size:clamp(10px,.85vw,13px);color:#8398a2;background:#fff;border-radius:6px;padding:clamp(3px,.5vh,5px) clamp(10px,1vw,16px);flex:1;white-space:nowrap;overflow:hidden;}
+  .frame img{width:100%;display:block;object-fit:cover;object-position:top;}
+
+  .split{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(26px,3.6vw,64px);align-items:center;height:100%;}
+  .split .copy{display:flex;flex-direction:column;justify-content:center;min-width:0;}
+  .split .frame img{max-height:64vh;}
+
+  /* 3-line summary */
+  .three{display:flex;flex-direction:column;gap:clamp(14px,2.4vh,26px);margin-top:clamp(18px,3vh,38px);}
+  .three .r{display:flex;gap:clamp(14px,1.4vw,22px);align-items:flex-start;}
+  .three .n{flex-shrink:0;width:clamp(34px,2.6vw,46px);height:clamp(34px,2.6vw,46px);border-radius:50%;background:var(--aqua);color:#fff;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,1.4vw,24px);font-weight:800;}
+  .three .tx{font-size:clamp(15px,1.55vw,27px);letter-spacing:-0.02em;line-height:1.5;}
+  .three .tx b{font-weight:800;} .three .tx span{color:var(--sub);}
+
+  /* today */
+  .today{background:var(--orange-soft);border:1px solid #f7d3c1;border-left:6px solid var(--orange);border-radius:var(--radius);padding:clamp(22px,3.6vh,42px) clamp(22px,2.4vw,44px);margin-top:clamp(18px,3vh,34px);}
+  .today .t{font-size:clamp(11px,1vw,15px);font-weight:800;letter-spacing:.1em;color:var(--orange);text-transform:uppercase;margin-bottom:clamp(10px,1.6vh,18px);}
+  .today .big{font-size:clamp(20px,2.3vw,40px);font-weight:800;letter-spacing:-0.03em;line-height:1.35;color:var(--navy);}
+  .today .sm{margin-top:clamp(10px,1.6vh,18px);font-size:clamp(13px,1.2vw,20px);color:var(--sub);}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;margin-top:clamp(16px,2.8vh,34px);}
+  .pt td,.pt th{padding:clamp(11px,1.7vh,22px) clamp(8px,1vw,18px);border-bottom:1px solid var(--line);font-size:clamp(13px,1.3vw,22px);letter-spacing:-0.015em;text-align:left;vertical-align:top;}
+  .pt th{background:var(--navy);color:#fff;font-weight:700;font-size:clamp(12px,1.1vw,18px);}
+  .pt td b{color:var(--navy);} .pt tr:last-child td{border-bottom:0;}
+
+  /* roles */
+  .roles{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,26px);margin-top:clamp(16px,2.6vh,30px);}
+  .role{border:1px solid var(--line);border-radius:var(--radius);padding:clamp(18px,2.8vh,32px) clamp(16px,1.6vw,28px);background:var(--soft);}
+  .role.o{border-top:4px solid var(--orange);} .role.u{border-top:4px solid var(--aqua);}
+  .role h3{font-size:clamp(15px,1.5vw,24px);font-weight:800;color:var(--navy);margin-bottom:clamp(10px,1.4vh,16px);}
+  .role li{list-style:none;font-size:clamp(12.5px,1.15vw,19px);color:var(--ink);padding:clamp(4px,.7vh,9px) 0 clamp(4px,.7vh,9px) 1.3em;position:relative;}
+  .role li::before{content:"";position:absolute;left:0;top:calc(.6em + clamp(4px,.7vh,9px));width:.5em;height:.5em;border-radius:50%;background:var(--aqua);}
+  .role.o li::before{background:var(--orange);}
+  .escape{margin-top:clamp(14px,2.2vh,24px);background:var(--green-soft);border:1px solid #bce8cd;border-radius:var(--radius);padding:clamp(13px,2vh,22px) clamp(15px,1.5vw,26px);font-size:clamp(12.5px,1.15vw,19px);color:var(--ink);}
+  .escape b{color:var(--green);}
+
+  /* group list */
+  .grp{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,1.8vh,24px) clamp(26px,3vw,56px);margin-top:clamp(18px,3vh,36px);}
+  .grp .it{display:flex;gap:clamp(13px,1.3vw,20px);align-items:flex-start;}
+  .grp .it .ic{flex-shrink:0;width:clamp(30px,2.4vw,44px);height:clamp(30px,2.4vw,44px);border-radius:10px;background:var(--soft);border:1px solid var(--line);color:var(--aqua-2);display:flex;align-items:center;justify-content:center;font-size:clamp(14px,1.2vw,20px);font-weight:800;}
+  .grp .it .h{font-size:clamp(14.5px,1.4vw,23px);font-weight:800;letter-spacing:-0.02em;}
+  .grp .it .d{font-size:clamp(12px,1.05vw,17px);color:var(--sub);margin-top:.25em;line-height:1.5;}
+  .key .it .ic{background:var(--orange-soft);border-color:#f7d3c1;color:var(--orange);}
+  .keyline{margin-top:clamp(14px,2.2vh,24px);font-size:clamp(12.5px,1.15vw,19px);color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(12px,1.8vh,20px) clamp(15px,1.5vw,26px);}
+  .keyline b{color:var(--navy);}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.4vw,22px);margin-top:clamp(18px,3vh,38px);}
+  .steps .s{background:var(--soft);border:1px solid var(--line);border-radius:var(--radius);padding:clamp(18px,2.8vh,32px) clamp(14px,1.4vw,24px);}
+  .steps .s .n{width:clamp(30px,2.4vw,42px);height:clamp(30px,2.4vw,42px);background:var(--aqua);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(14px,1.2vw,19px);margin-bottom:clamp(10px,1.6vh,18px);}
+  .steps .s .t{font-size:clamp(14px,1.4vw,22px);font-weight:800;letter-spacing:-0.02em;margin-bottom:.3em;}
+  .steps .s .t small{display:block;font-size:clamp(10px,.85vw,13px);color:var(--aqua-2);font-weight:800;letter-spacing:0;margin-bottom:.4em;}
+  .steps .s .d{font-size:clamp(11px,1vw,16px);color:var(--sub);line-height:1.45;}
+  .steps .s .free{display:inline-block;margin-top:clamp(8px,1.2vh,14px);font-size:clamp(10.5px,.95vw,15px);font-weight:800;color:var(--green);background:var(--green-soft);border:1px solid #bce8cd;border-radius:999px;padding:3px 11px;}
+
+  /* glossary */
+  .gloss{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.8vh,22px) clamp(26px,3.4vw,60px);margin-top:clamp(18px,3vh,36px);}
+  .gloss .g{font-size:clamp(13px,1.2vw,20px);}
+  .gloss .g b{color:var(--navy);font-weight:800;}
+  .gloss .g span{color:var(--sub);}
+
+  /* closing */
+  .closing{background:var(--dark);justify-content:center;}
+  .closing .cta{position:absolute;left:7vw;bottom:6vh;display:flex;gap:clamp(26px,4vw,64px);flex-wrap:wrap;}
+  .closing .cta .i{font-size:clamp(14px,1.3vw,21px);color:#d6ecf2;}
+  .closing .cta .i b{display:block;font-size:clamp(10px,.9vw,13px);letter-spacing:.16em;color:#6f97a8;text-transform:uppercase;margin-bottom:.5em;font-weight:800;}
+  .closing .fill{color:#3f6275;letter-spacing:.1em;}
+
+  /* chrome */
+  .nav{position:fixed;bottom:2.4vh;right:2.4vw;display:flex;align-items:center;gap:13px;z-index:30;}
+  .nav button{width:44px;height:44px;border:none;border-radius:11px;background:rgba(12,47,74,.92);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+  .nav button:hover{background:var(--aqua-2);}
+  .nav .count{font-size:13px;color:#2f4d5e;background:rgba(255,255,255,.92);padding:8px 13px;border-radius:9px;font-weight:800;min-width:58px;text-align:center;}
+  .bar-progress{position:fixed;top:0;left:0;height:3px;background:var(--aqua);z-index:30;transition:width .35s cubic-bezier(.2,.7,.2,1);}
+  .hint{position:fixed;top:2.4vh;right:2.6vw;font-size:12px;color:rgba(110,140,155,.7);z-index:30;}
+
+  @media (max-width:760px){
+    .split{grid-template-columns:1fr;gap:18px;} .split .frame{display:none;}
+    .roles,.grp,.gloss{grid-template-columns:1fr;} .steps{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="bar-progress" id="prog"></div>
+<div class="deck" id="deck">
+
+  <!-- 1 cover -->
+  <section class="slide cover active">
+    <div class="split">
+      <div class="copy">
+        <div class="logo anim" style="--d:.05s">스피드설비 · 홈페이지 마케팅</div>
+        <h1 class="anim" style="--d:.15s">전단지는 몇 명이<br>봤는지 모릅니다.<br><span class="em">홈페이지는 숫자로</span> 남습니다.</h1>
+        <span class="badge anim" style="--d:.34s">10가지 중 9가지는 광고비 0원 · 사장님은 한 달에 5분</span>
+      </div>
+      <div class="frame anim" style="--d:.3s"><div class="bar"><i></i><i></i><i></i><span class="u">우리 홈페이지</span></div><img src="assets/site-pc.jpeg" alt="스피드설비 홈페이지"></div>
+    </div>
+    <div class="meta">사장님을 위한 쉬운 설명서</div>
+    <div class="pg">2026</div>
+  </section>
+
+  <!-- 2 three-line summary -->
+  <section class="slide">
+    <div class="tag anim" style="--d:.05s">바쁘시면 이 3줄만</div>
+    <h2 class="anim" style="--d:.12s">핵심은 이게 전부입니다</h2>
+    <div class="three">
+      <div class="r anim" style="--d:.24s"><div class="n">1</div><div class="tx"><b>방문자·전화를 세는 무료 장치를 답니다.</b> <span>다는 건 업체가 합니다. 사장님이 컴퓨터 만질 일은 없습니다.</span></div></div>
+      <div class="r anim" style="--d:.34s"><div class="n">2</div><div class="tx"><b>"전화·견적 신청이 실제로 몇 건 왔는지"를 셉니다.</b> <span>방문자 수가 아니라 진짜 전화 건수가 성과입니다.</span></div></div>
+      <div class="r anim" style="--d:.44s"><div class="n">3</div><div class="tx"><b>그 숫자를 보고 전화가 잘 나오는 광고만 남깁니다.</b> <span>사장님은 한 달에 한 번 "계속할까 말까"만 정하면 됩니다.</span></div></div>
+    </div>
+  </section>
+
+  <!-- 3 today -->
+  <section class="slide">
+    <div class="tag anim" style="--d:.05s">오늘 당장 할 일</div>
+    <h2 class="anim" style="--d:.12s">딱 한 가지면 됩니다</h2>
+    <div class="today anim" style="--d:.24s">
+      <div class="t">오늘 할 일</div>
+      <div class="big">홈페이지 만든 사람(또는 우리)에게 전화 한 통 —<br><span class="or">"방문자·전화 세는 장치 좀 달아주세요."</span></div>
+      <div class="sm">이게 전부입니다. 사장님은 더 하실 게 없습니다. 장치값은 0원, 다는 데 보통 1~3일이면 됩니다.</div>
+    </div>
+  </section>
+
+  <!-- 4 who/how much/how long -->
+  <section class="slide">
+    <div class="tag anim" style="--d:.05s">제일 궁금한 것 먼저</div>
+    <h2 class="anim" style="--d:.12s">누가 하나 · 얼마 드나 · 며칠 걸리나</h2>
+    <table class="pt">
+      <thead><tr class="anim" style="--d:.2s"><th>단계</th><th>무엇을</th><th>누가</th><th>돈</th><th>기간</th></tr></thead>
+      <tbody>
+        <tr class="anim" style="--d:.28s"><td><b>1단계</b><br>측정 깔기</td><td>장치 설치 + 전화·카톡·견적 건수 세기</td><td>업체(코드 심기)</td><td>장치값 <b>0원</b> · 설치 품 별도</td><td>1~3일</td></tr>
+        <tr class="anim" style="--d:.36s"><td><b>2단계</b><br>들여다보기</td><td>지역·시간·화면 분석 보고서</td><td>업체 정리 → 사장님 5분</td><td>장치값 <b>0원</b> · 월 관리 협의</td><td>매달 1회</td></tr>
+        <tr class="anim" style="--d:.44s"><td><b>3단계</b><br>광고(선택)</td><td>검색광고 + 나간 손님 재노출</td><td>업체 세팅 → 사장님 결정</td><td><b>광고비</b>(하루 상한 사장님이 정함)</td><td>원할 때</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 5 roles -->
+  <section class="slide">
+    <div class="tag anim" style="--d:.05s">역할 나누기</div>
+    <h2 class="anim" style="--d:.12s">사장님은 거의 안 하셔도 됩니다</h2>
+    <div class="roles">
+      <div class="role o anim" style="--d:.24s">
+        <h3>사장님이 하는 것</h3>
+        <ul><li>오늘 전화 한 통("장치 달아주세요")</li><li>한 달에 한 번, 보고서 5분 확인</li><li>"이 광고 계속할까 말까" 결정만</li><li>(광고 시) 하루 쓸 돈 상한 정하기</li></ul>
+      </div>
+      <div class="role u anim" style="--d:.34s">
+        <h3>업체(우리)가 하는 것</h3>
+        <ul><li>장치 설치(코드 심기)</li><li>전화·카톡·견적 건수 측정 세팅</li><li>매달 숫자 보고서 정리·전달</li><li>(광고 시) 광고 세팅·관리</li></ul>
+      </div>
+    </div>
+    <div class="escape anim" style="--d:.46s"><b>빠져나갈 문이 있습니다.</b> 1단계 측정만 깔고 광고는 안 하셔도 됩니다. 숫자를 2~3주 보시고 내키지 않으면 거기서 멈추시면 됩니다.</div>
+  </section>
+
+  <!-- 6 group A -->
+  <section class="slide">
+    <div class="tag anim" style="--d:.05s">활용 ① 누가 오나 — 보기만 하면 됨 · 0원</div>
+    <h2 class="anim" style="--d:.12s">누가, 어디서, 언제, 뭐 치고 오나</h2>
+    <div class="grp">
+      <div class="it anim" style="--d:.24s"><div class="ic">1</div><div><div class="h">방문자 기본</div><div class="d">하루 몇 명, 네이버 검색·광고·직접 중 어디로 왔나.</div></div></div>
+      <div class="it anim" style="--d:.32s"><div class="ic">2</div><div><div class="h">어느 동네</div><div class="d">명지동·하단동 등 많이 보는 동네에 전단·지역광고 집중.</div></div></div>
+      <div class="it anim" style="--d:.4s"><div class="ic">3</div><div><div class="h">몇 시·무슨 요일</div><div class="d">새벽·주말 급한 전화가 몰리는 때를 알면 그 시간 대비.</div></div></div>
+      <div class="it anim" style="--d:.48s"><div class="ic">4</div><div><div class="h">검색어</div><div class="d">"부산 변기막힘" 등 실제 친 말을 광고 문구에 그대로.</div></div></div>
+    </div>
+  </section>
+
+  <!-- 7 group B (key) -->
+  <section class="slide">
+    <div class="split">
+      <div class="copy">
+        <div class="tag anim" style="--d:.05s" style="color:var(--orange)">활용 ② 진짜 성과 — 가장 중요 · 0원</div>
+        <h2 class="anim" style="--d:.12s">방문자 수 말고,<br><span class="or">전화·신청 건수</span></h2>
+        <div class="grp key" style="grid-template-columns:1fr;margin-top:clamp(16px,2.6vh,28px);">
+          <div class="it anim" style="--d:.26s"><div class="ic">5</div><div><div class="h">전화 버튼 누른 수 ★</div><div class="d">구경만 한 사람과 진짜 전화한 사람을 구분해 셉니다.</div></div></div>
+          <div class="it anim" style="--d:.34s"><div class="ic">6</div><div><div class="h">카톡 상담 누른 수</div><div class="d">전화와 한 번에 같이 세팅. 따로 일이 느는 게 아닙니다.</div></div></div>
+          <div class="it anim" style="--d:.42s"><div class="ic">7</div><div><div class="h">견적 신청 수 ★</div><div class="d">신청 몇 건, 어느 광고 보고 왔나 → 손님 1명당 광고비 계산.</div></div></div>
+        </div>
+        <div class="keyline anim" style="--d:.52s"><b>참고 합격선</b> · 방문 100명당 전화·신청 3~5건이면 보통. 그보다 낮으면 광고가 아니라 <b>사이트 문구·버튼</b>부터 손봅니다.</div>
+      </div>
+      <div class="frame anim" style="--d:.32s"><div class="bar"><i></i><i></i><i></i><span class="u">폰 화면</span></div><img src="assets/site-m.jpeg" alt="전화 버튼"></div>
+    </div>
+  </section>
+
+  <!-- 8 group C -->
+  <section class="slide">
+    <div class="split">
+      <div class="copy">
+        <div class="tag anim" style="--d:.05s">활용 ③ 화면 고치기 — 더 많이 전화 오게 · 0원</div>
+        <h2 class="anim" style="--d:.12s">어디서 보고<br>나가는지 보입니다</h2>
+        <div class="grp" style="grid-template-columns:1fr;margin-top:clamp(16px,2.6vh,28px);">
+          <div class="it anim" style="--d:.26s"><div class="ic">8</div><div><div class="h">어디까지 보고 나가나</div><div class="d">"후기까지는 보는데 비용에서 나간다" → 그 부분 문구를 손봄.</div></div></div>
+          <div class="it anim" style="--d:.36s"><div class="ic">9</div><div><div class="h">손가락 동선 (히트맵·화면 녹화)</div><div class="d">실제 방문을 CCTV 영상처럼 다시 봐서 헷갈리는 버튼을 찾음. <b>MS 클래리티 — 완전 무료.</b></div></div></div>
+        </div>
+      </div>
+      <div class="frame anim" style="--d:.32s"><div class="bar"><i></i><i></i><i></i><span class="u">우리 홈페이지</span></div><img src="assets/site-pc.jpeg" alt="홈페이지 화면"></div>
+    </div>
+  </section>
+
+  <!-- 9 group D -->
+  <section class="slide dk">
+    <div class="tag anim" style="--d:.05s">활용 ④ 광고로 키우기 — 유일하게 광고비</div>
+    <h2 class="anim" style="--d:.12s">나간 손님을 다시 부릅니다</h2>
+    <p class="lead anim" style="--d:.22s">광고를 '전화로 이어진 만큼'에 맞춰 조절하고, 들어왔다 전화 안 하고 나간 사람에게 광고를 한 번 더 띄웁니다. 가게 앞 지나간 사람에게 전단을 다시 쥐여주는 것과 같습니다.</p>
+    <div class="keyline anim" style="--d:.4s" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:#cfe6ee;"><b style="color:#fff;">안심 포인트</b> · 하루 쓸 돈 상한을 사장님이 정합니다(예: 하루 1만원). 통장에서 알아서 무한정 빠지지 않습니다.</div>
+  </section>
+
+  <!-- 10 start steps -->
+  <section class="slide">
+    <div class="tag anim" style="--d:.05s">시작 순서</div>
+    <h2 class="anim" style="--d:.12s">한 번에 다 하지 않습니다</h2>
+    <div class="steps">
+      <div class="s anim" style="--d:.24s"><div class="n">1</div><div class="t"><small>기초 깔기</small>측정 장치</div><div class="d">GTM·GA4 설치, 전화·카톡·견적 건수 세기.</div><span class="free">0원</span></div>
+      <div class="s anim" style="--d:.34s"><div class="n">2</div><div class="t"><small>들여다보기</small>분석·개선</div><div class="d">지역·시간 보기, 히트맵으로 화면 손보기.</div><span class="free">0원</span></div>
+      <div class="s anim" style="--d:.44s"><div class="n">3</div><div class="t"><small>광고·선택</small>키우기</div><div class="d">전화 기준으로 광고 최적화, 나간 손님 재노출.</div></div>
+    </div>
+    <div class="keyline anim" style="--d:.54s">권장 · <b>1단계(전부 무료)</b>를 먼저 깔고 2~3주 숫자를 모은 뒤, 그 숫자를 근거로 광고를 시작하면 광고비 낭비를 크게 줄입니다.</div>
+  </section>
+
+  <!-- 11 glossary -->
+  <section class="slide">
+    <div class="tag anim" style="--d:.05s">모르는 단어가 나오면</div>
+    <h2 class="anim" style="--d:.12s">한 줄 용어 사전</h2>
+    <div class="gloss">
+      <div class="g anim" style="--d:.22s"><b>GTM</b> · <span>홈페이지에 다는 '데이터 수집 장치'.</span></div>
+      <div class="g anim" style="--d:.28s"><b>GA4</b> · <span>구글이 무료로 주는 '방문자 장부'.</span></div>
+      <div class="g anim" style="--d:.34s"><b>클래리티</b> · <span>MS가 무료로 주는 '화면 녹화·클릭 색칠' 도구.</span></div>
+      <div class="g anim" style="--d:.4s"><b>전환</b> · <span>구경이 아니라 '전화·견적신청 같은 진짜 행동'.</span></div>
+      <div class="g anim" style="--d:.46s"><b>리드</b> · <span>연락처를 남긴 '잠재 손님'.</span></div>
+      <div class="g anim" style="--d:.52s"><b>리타게팅</b> · <span>우리 사이트를 본 기기에 광고를 다시 보여주기.</span></div>
+    </div>
+  </section>
+
+  <!-- 12 closing -->
+  <section class="slide closing">
+    <div class="tag anim" style="--d:.05s" style="color:var(--mint)">시작</div>
+    <h2 class="anim" style="--d:.14s" style="color:#fff;">무료 1단계부터,<br>부담 없이 시작하시면 됩니다.</h2>
+    <p class="lead anim" style="--d:.3s" style="color:#a9cdd9;">장치만 깔아 2~3주 숫자를 본 뒤, 그때 광고를 할지 정하셔도 늦지 않습니다.</p>
+    <div class="cta">
+      <div class="i anim" style="--d:.42s"><b>담당</b><span class="fill">________________</span></div>
+      <div class="i anim" style="--d:.5s"><b>연락처</b><span class="fill">________________</span></div>
+      <div class="i anim" style="--d:.58s"><b>이메일</b><span class="fill">________________</span></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="hint">← → 또는 클릭 · F11 전체화면</div>
+<div class="nav">
+  <button id="prev" aria-label="이전">‹</button>
+  <span class="count" id="count">1 / 12</span>
+  <button id="next" aria-label="다음">›</button>
+</div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  const count=document.getElementById('count'),prog=document.getElementById('prog');
+  let i=0;
+  function go(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('active',k===i));count.textContent=(i+1)+' / '+slides.length;prog.style.width=((i)/(slides.length-1)*100)+'%';}
+  const next=()=>go(i+1),prev=()=>go(i-1);
+  document.getElementById('next').onclick=next;document.getElementById('prev').onclick=prev;
+  document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();next();}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();prev();}else if(e.key==='Home')go(0);else if(e.key==='End')go(slides.length-1);});
+  document.getElementById('deck').addEventListener('click',e=>{if(e.target.closest('.nav')||e.target.closest('a'))return;(e.clientX>window.innerWidth/2)?next():prev();});
+  go(0);
+</script>
+</body>
+</html>
